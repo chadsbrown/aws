@@ -115,6 +115,13 @@ module Opscode
         Chef::Log.debug("#{interface} eni id is #{eni_id}")
         eni_id
       end
+
+      def query_vpc_id(interface = 'eth0')
+        mac = query_mac_address(interface)
+        vpc_id = open("http://169.254.169.254/latest/meta-data/network/interfaces/macs/#{mac}/vpc-id", options = { proxy: false }, &:gets)
+        Chef::Log.debug("#{interface} eni is in #{vpc_id}")
+        vpc_id
+      end
     end
   end
 end
